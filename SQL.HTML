@@ -1,0 +1,154 @@
+Select * from Students
+
+--Question 1: Extract StudentId, FullName, EmailAddress, PhoneNumber, Onboarding Date, Level, Sex and Student Role and School Fees
+
+--Step 1 - Identify all tables that contain the information.
+--Students contains these (Extract StudentId, FullName, EmailAddress, PhoneNumber, Onboarding Date)
+--Levels contains (Level and School Fees)
+--Genders contains (Sex)
+--Roles contains (Role)
+
+--Step 2: - Identify the fields/Columns that contain the information
+--Students StudentId, FirstName Conc. (+) LastName with a space in between, EmailAddress, PhoneNumber and StartDate (Onboarding Date)
+--Levels has Description as the Levels
+--Gender has Description as Gender
+--Roles has Description as Role
+
+--Step 3: Identify the primary table
+-- The Primary key is the table that contains most of the foreign keys.
+-- Students contains three foreign keys hence is the main table
+
+--Step 4: Write the actual query to extract the required information observing the proper SQL syntax
+
+--Recal Step 1 - Identify all tables that contain the information.
+--Students contains these (Extract StudentId, FullName, EmailAddress, PhoneNumber, Onboarding Date)
+--Levels contains (Level and School Fees)
+--Genders contains (Sex)
+--Roles contains (Role)
+
+--Extract StudentId, FullName, EmailAddress, PhoneNumber, Onboarding Date, Level, Sex and Student Role and School Fees
+
+SELECT Students.StudentId, (Students.FirstName + ' ' + Students.LastName) AS FullName, Students.EmailAddress, Students.PhoneNumber,	Students.StartDate AS [Onboarding Date],
+	Levels.Description AS Level, Levels.Amount AS [School Fees],
+	Genders.Description AS Sex, 
+	Roles.Description AS Role
+FROM Students INNER JOIN Levels ON (Students.LevelId = Levels.LevelId) 
+	INNER JOIN Genders ON (Students.GenderId = Genders.GenderId) 
+	INNER JOIN Roles ON (Students.RoleId = Roles.RoleId)
+
+--Let call:
+--Students A
+--Levels B
+--Genders C
+--Roles D
+
+--Students S
+--Levels L
+--Genders G
+--Roles R
+
+SELECT S.StudentId, (S.FirstName + ' ' + S.LastName) AS FullName, S.EmailAddress, S.PhoneNumber,	S.StartDate AS [Onboarding Date],
+	L.Description AS Level, L.Amount AS [School Fees],
+	G.Description AS Sex, 
+	R.Description AS Role
+FROM Students AS S INNER JOIN Levels AS L ON (S.LevelId = L.LevelId) 
+	INNER JOIN Genders AS G ON (S.GenderId = G.GenderId) 
+	INNER JOIN Roles AS R ON (S.RoleId = R.RoleId)
+
+
+---SCALAR FUNCTION
+--CONCATENATE()
+
+SELECT CONCAT(' ', LastName) FROM Students
+
+SELECT CONCAT(FirstName, CONCAT(' ', LastName)) AS FullName FROM Students
+
+
+SELECT S.StudentId, CONCAT(S.FirstName,' ',S.LastName) AS FullName, S.EmailAddress, S.PhoneNumber,	S.StartDate AS [Onboarding Date],
+	L.Description AS Level, L.Amount AS [School Fees],
+	G.Description AS Sex, 
+	R.Description AS Role
+FROM Students AS S INNER JOIN Levels AS L ON (S.LevelId = L.LevelId) 
+	INNER JOIN Genders AS G ON (S.GenderId = G.GenderId) 
+	INNER JOIN Roles AS R ON (S.RoleId = R.RoleId)
+
+--UPPER(), LOWER()
+
+SELECT UPPER(FirstName), UPPER(LastName) FROM Students
+SELECT LOWER(FirstName), LOWER(LastName) FROM Students
+
+SELECT S.StudentId, CONCAT(S.FirstName,' ',S.LastName) AS FullName, LOWER(S.EmailAddress), S.PhoneNumber,	S.StartDate AS [Onboarding Date],
+	L.Description AS Level, L.Amount AS [School Fees],
+	G.Description AS Sex, 
+	R.Description AS Role
+FROM Students AS S INNER JOIN Levels AS L ON (S.LevelId = L.LevelId) 
+	INNER JOIN Genders AS G ON (S.GenderId = G.GenderId) 
+	INNER JOIN Roles AS R ON (S.RoleId = R.RoleId)
+
+UPDATE Students SET FirstName = UPPER(FirstName), LastName = UPPER(LastName), EmailAddress = UPPER(EmailAddress)
+
+select * from Students
+
+
+SELECT S.StudentId, CONCAT(S.FirstName,' ',S.LastName) AS FullName, LOWER(S.EmailAddress) AS EmailAddress, S.PhoneNumber,	S.StartDate AS [Onboarding Date],
+	L.Description AS Level, L.Amount AS [School Fees],
+	G.Description AS Sex, 
+	R.Description AS Role
+FROM Students AS S INNER JOIN Levels AS L ON (S.LevelId = L.LevelId) 
+	INNER JOIN Genders AS G ON (S.GenderId = G.GenderId) 
+	INNER JOIN Roles AS R ON (S.RoleId = R.RoleId)
+
+
+--LEFT(), SUBSTRING(), LEN(), RIGHT()
+
+SELECT FirstName, LEN(FirstName) AS StringLenght FROM Students
+
+SELECT FirstName, LEFT(FirstName,3) AS Firstthreecharacters FROM Students
+
+SELECT FirstName, RIGHT(FirstName,3) AS Firstthreecharacters FROM Students
+
+SELECT FirstName, SUBSTRING(FirstName,2,3) AS Firstthreecharacters FROM Students
+
+SELECT FirstName, SUBSTRING(FirstName,2,LEN(FirstName)) AS AllAfterTheFirst FROM Students
+
+
+SELECT S.StudentId, CONCAT(UPPER(LEFT(FirstName,1)),LOWER(SUBSTRING(FirstName,2,LEN(FirstName))),' ',UPPER(LEFT(LastName,1)),LOWER(SUBSTRING(LastName,2,LEN(LastName)))) AS FullName,
+LOWER(S.EmailAddress) AS EmailAddress, S.PhoneNumber,	S.StartDate AS [Onboarding Date],
+	L.Description AS Level, L.Amount AS [School Fees],
+	G.Description AS Sex, 
+	R.Description AS Role
+FROM Students AS S INNER JOIN Levels AS L ON (S.LevelId = L.LevelId) 
+	INNER JOIN Genders AS G ON (S.GenderId = G.GenderId) 
+	INNER JOIN Roles AS R ON (S.RoleId = R.RoleId)
+
+--FORMAT()
+SELECT S.StudentId, CONCAT(UPPER(LEFT(FirstName,1)),LOWER(SUBSTRING(FirstName,2,LEN(FirstName))),' ',UPPER(LEFT(LastName,1)),LOWER(SUBSTRING(LastName,2,LEN(LastName)))) AS FullName,
+LOWER(S.EmailAddress) AS EmailAddress, S.PhoneNumber,	FORMAT(S.StartDate,'MM-dd-yyyy') AS [Onboarding Date],
+	L.Description AS Level, L.Amount AS [School Fees],
+	G.Description AS Sex, 
+	R.Description AS Role
+FROM Students AS S INNER JOIN Levels AS L ON (S.LevelId = L.LevelId) 
+	INNER JOIN Genders AS G ON (S.GenderId = G.GenderId) 
+	INNER JOIN Roles AS R ON (S.RoleId = R.RoleId)
+
+
+--Read about sub queries
+
+
+
+SQL
+SUBQUERIES 
+a subquery is a query within a query 
+it is a query embedded in the WHERE clause of another query 
+
+RULES 
+you can place subqueries in many clauses: WHERE clause, HAVING clause FROM clause 
+subqueries can be used with SELECT,UPDATE,INSERT,DELETE along with expression operator.
+example of expression operator or comparison operator or equality operator =,>,<= and LIKE operator 
+
+a subquery is a query within another query 
+#the outer query is called the main query the inner query is called sucbquery
+
+the subquery execustes first when the subquery doesn't have any co-relationship with the main query
+
+when thereis 
